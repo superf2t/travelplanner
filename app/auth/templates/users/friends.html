@@ -1,0 +1,190 @@
+{% extends '/users/base1.html' %}
+
+{% block title %}Friends{% endblock %}
+
+{% block content %}
+
+  <div class="container" id="main-section">
+
+    <div>
+
+      <!-- Nav tabs -->
+      <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active">
+          <a href="#friends" id="friends-tab" role="tab" data-toggle="tab" aria-controls="friends" aria-expanded="true">My Friends</a>
+        </li>
+        <li role="presentation" class="dropdown">
+          <a href="#" id="tab-drop" class="dropdown-toggle" data-toggle="dropdown" aria-controls="tab-drop-contents" aria-expanded="false">
+            Friend Requests
+            <span class="badge">{{ session.current_user.num_total_requests }}</span>
+            <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="tab-drop" id="tab-drop-contents">
+            <li>
+              <a href="#received-friend-requests" id="received-friend-requests-tab" role="tab" data-toggle="tab" aria-controls="received-friend-requests">
+                Received
+                <span class="badge">{{ session.current_user.num_received_requests }}</span>
+              </a>
+            </li>
+            <li>
+              <a href="#sent-friend-requests" id="sent-friend-requests-tab" role="tab" data-toggle="tab" aria-controls="sent-friend-requests">
+                Sent
+                <span class="badge">{{ session.current_user.num_sent_requests }}</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li role="presentation">
+          <a href="#find-friends" id="find-friends-tab" role="tab" data-toggle="tab" aria-controls="find-friends" aria-expanded="false">Find Friends</a>
+        </li>
+      </ul>
+
+      <!-- Tab panes -->
+      <div class="tab-content">
+
+        <!-- Friends tab content -->
+        <div role="tabpanel" class="tab-pane fade active in" id="friends" aria-labelledby="friends-tab">
+          <h2>My Friends</h2>
+          <div class="row">
+            {% if friends %}
+              {% for friend in friends %}
+                <div class="col-xs-6 col-sm-2" id="user-profile-pic-sm">
+                  <a href="users/{{ friend.id }}">
+                    {{ friend.first_name }} {{ friend.last_name}}
+                  </a>
+                  <!-- Put Unfriend button on user profile page instead -->
+                  <!-- <button type="button" class="btn btn-primary" id="unfriend-btn">Unfriend</button> -->
+                </div><!-- /.col -->
+              {% endfor %}
+            {% else %}
+              <div class="col-xs-12">
+                <p>You haven't added any friends. Find friends and connect with them!</p>
+              </div>
+            {% endif %}
+          </div><!-- /.row -->
+            <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h3>Travel Planner Users</h3>
+                        </div>
+                        {% if users.has_prev %}<a class="btn btn-primary btn-fill" href="{{ url_for('auth_blueprint.index', page=users.prev_num) }}">Next</a>{% endif %}
+                        {% if users.has_next %}<a  class="btn btn-primary btn-fill" href="{{ url_for('auth_blueprint.index', page=users.next_num) }}">Previous</a>{% endif %}
+                        <div class="content" style="width:100%;">
+                        <table cellspacing="4" style="width:80%; height:80%; border-collapse: collapse;">
+                        <tr style="border-spacing: 0;">
+                        {% for user in users.items %}
+                            {% if session.current_user.id != user.id %}
+                            <td>
+                            <div class="col-xs-12 col-md-8">
+                              <div class="list-group" >
+                                <a href="/users/{{ user.id }}" class="list-group-item">
+                                  <div class="media">
+                                    <div class="media-left">
+                                      {% if csPic=='default' %}
+                                        <img class="avatar border-gray" src="{{current_user.gravatar(size=90)}}" alt="Image for {{ user.first_name }}"/>
+                                     {% else %}
+                                        <img class="avatar border-gray" src="{{ url_for('.static', filename='images/users/'+usID[loop.index-1]+'/'+csPic[loop.index-1]) }}" alt="Image for {{ user.first_name }}"/>
+                                     {% endif %}
+                                    </div><!-- /.media-left -->
+                                    <div class="media-body">
+                                      <h3 class="media-heading">{{ user.first_name }} {{ user.last_name }} {{search_results}}</h3>
+                                      <p>
+                                        <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Location: {{user.address}}, {{ user.city }}
+                                      </p>
+                                    </div><!-- /.media-body -->
+                                  </div><!-- /.media -->
+                                </a>
+                              </div><!-- /.list-group -->
+                            </div><!-- /.col -->
+                            {% endif %}
+                            </td>
+                        {% if loop.index%4==0 %}
+                            </tr>
+                            <tr>
+                            {% endif %}
+                        {% endfor %}
+                        </table>
+                        </div>
+                    </div>
+            </div>
+        </div><!-- /#friends -->
+
+        <!-- Received Friend Requests tab content -->
+        <div role="tabpanel" class="tab-pane fade" id="received-friend-requests" aria-labelledby="received-friend-requests-tab">
+          <h2>Received Friend Requests</h2>
+          <div class="row">
+            {% if received_friend_requests %}
+              {% for received_friend_request in received_friend_requests %}
+                <div class="col-xs-6 col-sm-2" id="user-profile-pic-sm">
+                  <a href="/users/{{ received_friend_request.id }}">
+                    {% if received_friend_request.id == 3 %}
+                      <img class="img-circle img-responsive" src="/static/img/profile-stan-marsh.jpg">
+                    {% else %}
+                      <img class="img-circle img-responsive" src="/static/img/profile-avatar.png">
+                    {% endif %}
+                    {{ received_friend_request.first_name }} {{ received_friend_request.last_name }}
+                  </a>
+                  <br><br>
+                  <button type="button" class="btn btn-success" id="accepted-btn">Accept</button>
+                  <button type="button" class="btn btn-danger" id="deleted-btn">Reject</button>
+                </div><!-- /.col -->
+              {% endfor %}
+            {% else %}
+              <div class="col-xs-12">
+                <p>No pending Friend Requests for you.</p>
+              </div>
+            {% endif %}
+          </div><!-- /.row -->
+        </div><!-- /#received-friend-requests -->
+
+        <!-- Sent Friend Requests tab content -->
+        <div role="tabpanel" class="tab-pane fade" id="sent-friend-requests" aria-labelledby="sent-friend-requests-tab">
+          <h2>Sent Friend Requests</h2>
+          <div class="row">
+            {% if sent_friend_requests %}
+              {% for sent_friend_request in sent_friend_requests %}
+                <div class="col-xs-6 col-sm-2" id="user-profile-pic-sm"> 
+                  <a href="users/{{ sent_friend_request.id }}">
+                   <img class="img-circle img-responsive" src="/static/img/profile-avatar.png">
+                    {{ sent_friend_request.first_name }} {{ sent_friend_request.last_name }}
+                  </a>
+                  <br><br>
+                  <button type="button" class="btn btn-danger" id="cancel-btn">Cancel</button>
+                </div><!-- /.col -->
+              {% endfor %}
+            {% else %}
+              <div class="col-xs-12">
+                <p>No pending Friend Requests for you.</p>
+              </div>
+            {% endif %}
+          </div><!-- /.row -->
+        </div><!-- /#sent-friend-requests -->
+
+        <!-- Find Friends tab content -->
+        <div role="tabpanel" class="tab-pane fade" id="find-friends" aria-labelledby="find-friends-tab">
+          <h2>Find Friends</h2>
+          <div class="row">
+            <div class="col-xs-12">
+              <p>
+                Enter the name of your friend and see if they are a user of TravelPlanner! Connect with them to see their trips.
+              </p>
+              <!-- Search engine for users -->
+              <form class="navbar-form navbar-left" role="search" action="/friends/search">
+                <div class="input-group">
+                  <input class="form-control" id="searchbox" type="search" name="q" aria-label="Find Friend" placeholder="Find friend by name">
+                  <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                  </span>
+                </div>
+              </form>
+            </div>
+          </div><!-- /.row -->
+        </div><!-- /#find-friends -->
+
+      </div><!-- /.tab-content -->
+
+    </div><!-- /div wrapping the nav tabs and tab panes -->
+
+  </div><!-- /.container -->
+
+{% endblock %}

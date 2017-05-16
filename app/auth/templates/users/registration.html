@@ -1,0 +1,77 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}
+Register
+{% endblock %}
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" href="{{ url_for('.static', filename='css/bootstrap.min.css') }}">
+<link rel="stylesheet" href="{{ url_for('.static', filename='css/bootstrap-theme.min.css') }}">
+<link rel="stylesheet" href="{{ url_for('.static', filename='css/register.css') }}">
+<link rel="stylesheet" href="{{ url_for('.static', filename='css/simple-line-icons.css') }}">
+<link rel="stylesheet" href="{{ url_for('.static', filename='css/font-awesome.min.css') }}">
+<link rel="stylesheet" href="{{ url_for('.static', filename='css/pace.css') }}">
+<link rel="stylesheet" href="{{ url_for('.static', filename='css/landing-style.css') }}">
+<link rel="stylesheet" href="{{ url_for('landing_blueprint.static', filename='css/search-box.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/main/">TravelPlanner</a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav  smooth-scroll navbar-right">
+                        <li>
+                            <div class="container" id="se">
+                                <div id="wrap">
+                                  <form action="/main/siteSearch" method="get">
+                                      <input id="search" name="search_1" type="text" placeholder="Search the site">
+                                      <input id="search_submit" name="search_submit" type="submit">
+                                  </form>
+                                </div>
+                            </div>
+                        </li>
+                        <li><a href="/main/#intro">Intro</a></li>
+                        <li><a href="/main/#features">Features</a></li>
+                        <li><a href="/main/#pricing">Trip Plans</a></li>
+                        <li><a href="/main/#team">Team</a></li>
+                        <li><a href="/main/#contact">About</a></li>
+                        <li class="nav-button"><a href="/login">Sign In</a></li>
+                        <li class="nav-button"><a href="#">Sign Up</a></li>
+                    </ul>
+                </div><!--/.nav-collapse -->
+            </div><!--/.container-fluid -->
+        </nav><br><br><br>
+
+<div class="container">
+
+      <form class="form-signin" method="POST" action="{{ url_for('auth_blueprint.register') }}">
+        <h2 class="form-signin-heading">Create Account</h2>
+          {{ form.hidden_tag() }}
+          {{ wtf.form_field(form.username) }}
+          {{ wtf.form_field(form.email) }}
+          {{ wtf.form_field(form.password) }}
+          {{ wtf.form_field(form.confirm) }}
+ 
+        <button class="btn btn-lg btn-primary btn-block" type="submit" name="submit">Sign Up</button>
+        <div>
+          <h3>Already have an account?<a href="{{ url_for('auth_blueprint.login') }}">Sign In</a></h3>
+        </div>
+      </form>
+
+    </div> <!-- /container -->
+{% endblock %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="{{ url_for('.static', filename='js/bootstrap.min.js') }}"></script>

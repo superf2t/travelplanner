@@ -1,0 +1,134 @@
+{% extends '/users/base1.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+
+{% block styles %}
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+{% endblock %}
+
+
+{% block scripts %}
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+    $( function() {
+        $( "#datepicker" ).datepicker();
+    });
+    </script>
+{% endblock %}
+
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="header">
+                                <h4 class="title">Edit Profile</h4>
+                            </div>
+                            <form action="" method="POST" name="edit" enctype="multipart/form-data">
+                            {{form.hidden_tag()}}
+                            <div class="content">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                {{wtf.form_field(form.first_name)}}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                {{wtf.form_field(form.last_name)}}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                                <div class="form-group">
+                                                    {{wtf.form_field(form.birth_date, id="datepicker")}}
+                                                </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                {{wtf.form_field(form.address)}}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                {{wtf.form_field(form.city)}}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                {{wtf.form_field(form.country)}}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                {{wtf.form_field(form.contact_num)}}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                {{wtf.form_field(form.description)}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                {{wtf.form_field(form.file)}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-info btn-fill pull-right">Update Profile</button>
+                                    <div class="clearfix"></div>
+                            </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card card-user">
+                            <div class="image">
+                            </div>
+                            <div class="content">
+                                <div class="author">
+                                    <!--<img class="avatar border-gray" src="{{current_user.gravatar(size=256)}}" alt="..."/>-->
+                                    {% if csPic=='default' %}
+                                        <img class=""img-circle img-responsive" src="{{current_user.gravatar(size=200)}}" alt="..."/>
+                                     {% else %}
+                                        <img class="img-circle img-responsive" src="{{ url_for('.static', filename='images/users/'+csID+'/'+csPic) }}" alt="..." style="width:150px;height:150px;">
+                                     {% endif %}
+
+                                      <h4 class="title">{{current_user.first_name}} {{current_user.last_name}}<br />
+                                         <small>{{current_user.username}}</small><br><br>
+                                         <small>"{{current_user.description}}"</small>
+                                      </h4>
+                                </div>
+                                <p class="description text-center"></p>
+                            </div>
+                            <hr>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}
+
+{% block javascript %}
+<script>
+    $( function() {
+        $( "#datepicker" ).datepicker();
+    });
+</script>
+{% endblock %}
